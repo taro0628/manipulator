@@ -1,0 +1,16 @@
+@charset "UTF-8";
+body {
+    font-family: Helvetica , "游ゴシック" , "Yu Gothic" , sans-serif;
+}
+h1 {
+    width: 500px;
+    margin: 20px auto;
+    margin-bottom: 50px;
+    font-size: 60px;
+    text-align: center;
+}
+p {
+    width: 500px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
