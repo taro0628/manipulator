@@ -1,4 +1,4 @@
-var bassdrum = {
+var bassdrumRecipe = {
     name: 'VCA',
     gain: 0.9,
     input: {
@@ -65,7 +65,7 @@ var bassdrum = {
     }
 };
 
-var snare = {
+var snareRecipe = {
     name: 'VCA',
     gain: 0.9,
     input: {
@@ -112,7 +112,7 @@ var snare = {
     }
 };
 
-var highhat = {
+var highhatRecipe = {
     name: 'VCA',
     gain: 0.9,
     input: {
@@ -147,7 +147,7 @@ var highhat = {
     }
 };
 
-var tone1 = {
+var tone1Recipe = {
     name: 'VCA',
     gain: 0.9,
     input: {
@@ -178,7 +178,7 @@ var tone1 = {
     }
 };
 
-var tone2 = {
+var tone2Recipe = {
     name: 'VCA',
     gain: 0.9,
     input: {
@@ -209,7 +209,7 @@ var tone2 = {
     }
 };
 
-var tone3 = {
+var tone3Recipe = {
     name: 'VCA',
     gain: 0.9,
     input: {
@@ -230,7 +230,7 @@ var tone3 = {
                 gain: 1
             },
             input: {
-                name: 'VCO',
+                name: 'VCO2',
                 param: {
                     frequency: 'cv',
                     type: 'sawtooth'

@@ -20,12 +20,58 @@
         var noteLength = 0.3;    //音の長さ
 
         //各音色ごとにManipulatorオブジェクトを作ります
-        var bassdrum = new Manipulator(ctx, bassdrum);
-        var snare = new Manipulator(ctx, snare);
-        var highhat = new Manipulator(ctx, highhat);
-        var tone1 = new Manipulator(ctx, tone1);
-        var tone2 = new Manipulator(ctx, tone2);
-        var tone3= new Manipulator(ctx, tone3);
+        var bassdrum = new Manipulator(ctx, bassdrumRecipe);
+        var snare = new Manipulator(ctx, snareRecipe);
+        var highhat = new Manipulator(ctx, highhatRecipe);
+        var tone1 = new Manipulator(ctx, tone1Recipe);
+        var tone2 = new Manipulator(ctx, tone2Recipe);
+
+        var setVCO2 = function(Manipulator, currentRecipeNode, destNode){
+            var vco = Manipulator.ctx.createOscillator();
+            Manipulator.moduleManager.registerAudioNode(currentRecipeNode, vco);
+            var param = currentRecipeNode['param'];
+            var octave = 1;
+
+            //オシレータの周波数に関する設定
+            //frequencyがcvの時は外部入力の周波数を設定
+            if (param['frequency'] == 'cv'){
+                if(param['octave'] != undefined){
+                    octave =param['octave'];
+                }
+                vco.frequency.value = Manipulator.freq * octave;
+                Manipulator.cvList.push(vco);
+            //frequencyにレシピノードが設定されていればそのレシピノードをfrequencyにつなぐ
+            }else if(param['frequency']['name'] != undefined){
+                var paramNode = param['frequency'];
+                Manipulator.setManipulator(paramNode, vco.frequency);
+
+            //それ以外は数値とみなして代入
+            }else{
+                vco.frequency.value = param['frequency'];
+            }
+            //オシレータのデチューンを設定
+            //detuneにレシピノードが設定されていればそのレシピノードをdetuneにつなぐ
+            if(param['detune'] != undefined){
+                if(param['detune']['name'] != undefined){
+                    var paramNode = param['detune'];
+                    Manipulator.setManipulator(paramNode, vco.detune);
+
+                //それ以外は数値とみなして代入
+                }else{
+                    vco.detune = param['detune'];
+                }
+            }
+            //オシレータのタイプを設定
+            vco.type = param['type'];
+
+            //VCOノードの設定が終わったのでdestNodeに接続
+            vco.connect(destNode);
+            currentRecipeNode['state'] = true;
+        }
+        var mm = new ModuleManager();
+        //VCO2 Moduleを登録
+        mm.registerModule('VCO2', setVCO2, 'VCO');
+        var tone3= new Manipulator(ctx, tone3Recipe, mm);
 
         $(function(){
             var note = bassdrum;

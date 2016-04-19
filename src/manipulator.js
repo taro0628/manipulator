@@ -42,10 +42,16 @@ ModuleManager.prototype.getAudioNode = function(recipeNode){
     return module.nodeList[recipeNode['id']];
 };
 
-function Manipulator(ctx, recipe){
+function Manipulator(ctx, recipe, mm){
     this.ctx = ctx;
     this.freq = 0;
-    this.moduleManager = new ModuleManager(); //モジュールを管理するオブジェクト
+    if(mm == undefined){
+        this.moduleManager = new ModuleManager(); //モジュールを管理するオブジェクト
+    }else{
+        this.moduleManager = mm;
+    }
+
+
     this.recipe = recipe;
     this.cvList = []; //周波数を設定する必要のあるAudioNodeを管理する
 
@@ -59,7 +65,10 @@ function Manipulator(ctx, recipe){
     this.moduleManager.registerModule('Delay', this.setDelay);
 
     this.initManipulator();
+
+    //recipeをもとにAudioNodeをつなぐ
     this.setManipulator(JSON.parse(JSON.stringify(this.recipe)), this.ctx.destination);
+    
     for (key in this.moduleManager){
         if (this.moduleManager[key].type == 'VCO'){
             for (var i=0; i<this.moduleManager[key].nodeCount; i++){
