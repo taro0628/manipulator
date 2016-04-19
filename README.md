@@ -30,27 +30,34 @@ JSON形式でオシレータやフィルタ、エフェクトなどのつなげ�
 2. 音色を指定するJSONを用意します。
 
   ```js
-  var toneRecipe = {
+  var tone1Recipe = {
     name: 'VCA',
     gain: 0.9,
     input: {
-        name: 'Env',
-        param:{
-            gain: 1,
-            attack: 0,
-            decay: 0.1,
-            sustain: 0.5,
-            release: 0.1,
+      name: 'Env',
+      param:{
+          gain: 1,
+          attack: 0,
+          decay: 0.1,
+          sustain: 0.5,
+          release: 0.1,
+      },
+      input: {
+        name: 'VCF',
+        param: {
+          frequency: 400,
+          type: 'bandpass',
+          Q: 8,
+          gain: 1
         },
         input: {
-            name: 'VCF',
-            param: {
-                frequency: 400,
-                type: 'bandpass',
-                Q: 8,
-                gain: 1
-            }
+          name: 'VCO',
+          param: {
+            frequency: 'cv',
+            type: 'triangle'
+          }
         }
+      }
     }
   };
   ```
