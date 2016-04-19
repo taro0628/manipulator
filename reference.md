@@ -41,7 +41,7 @@ Recipeで指定するModuleの基本的な形式は以下のようになって�
 |octave|frequencyの値に指定した数値をかけた値が実際の周波数として設定されます。デフォルトは1です。|◯|
 |detune|指定した数値だけfrequencyの値に足した値が実際の周波数として設定されます。単位はセントです。|◯|
 
-    typeで指定できる波形の種類です。
+typeで指定できる波形の種類です。
 
 | type | 波形 |
 |:------:|:------------|
@@ -85,8 +85,8 @@ Recipeで指定するModuleの基本的な形式は以下のようになって�
 |gain|フィルタのgainを設定します。|×|
 |detune|指定した数値だけfrequencyの値に足した値が実際の周波数として設定されます。単位はセントです。|◯|
 
-    typeで指定できるフィルタの種類です。  
-    詳細はWeb Audio APIのBiquadFilterNodeを参照してください。
+typeで指定できるフィルタの種類です。  
+詳細はWeb Audio APIのBiquadFilterNodeを参照してください。
 
 | type | 波形 |
 |:------:|:------------|
@@ -132,7 +132,7 @@ Recipeで指定するModuleの基本的な形式は以下のようになって�
 |noteOn(noteNo[, time])|noteNoで指定した番号に対応する音高の音をtimeで指定したタイミングでならします。timeを省略するとメソッドが呼ばれたタイミングで音をならします。|
 |noteOff([time])|timeで指定したタイミングで音を止めます。timeを省略するとメソッドが呼ばれたタイミングで音を止めます。|
 
-    timeはWeb Audio APIのAudioContextで取得できるものが基準になります。
+timeはWeb Audio APIのAudioContextで取得できるものが基準になります。
 
 ```js
 var AudioContext = window.AudioContext || window.webkitAudioContext;
