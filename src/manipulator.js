@@ -11,9 +11,8 @@ function ModuleManager(){
 }
 //AudioNodeを管理するオブジェクト
 ModuleManager.prototype.Module = function(setModule){
-    this.nodeList = new Array(10);
-    this.paramList = new Array(10);
-    this.nodeCount = 0;
+    this.nodeList = [];
+    this.paramList = [];
     this.type = null;
 
     //AudioNodeの設定を行う関数
@@ -28,13 +27,12 @@ ModuleManager.prototype.registerModule = function(name, setModule, type){
 ModuleManager.prototype.registerAudioNode = function(currentRecipeNode, audioNode){
     var module = this[currentRecipeNode['name']];
     //モジュールにAudioNodeを登録
-    currentRecipeNode['id'] = module.nodeCount;
-    module.nodeList[currentRecipeNode['id']] = audioNode;
-    module.nodeCount += 1;
+    currentRecipeNode['id'] = module.nodeList.length;
+    module.nodeList.push(audioNode);
 
     //レシピにparamが設定されていればparamListに追加
     if (currentRecipeNode['param'] != undefined){
-        module.paramList[currentRecipeNode['id']] = currentRecipeNode['param'];
+        module.paramList.push(currentRecipeNode['param']);
     }
 
 };
@@ -62,6 +60,7 @@ function Manipulator(ctx, recipe, mm){
 
     this.recipe = recipe;
     this.cvList = []; //周波数を設定する必要のあるAudioNodeを管理する
+    this.maxRelease = 0; //エンベロープの最大リリース値
 
     //moduleManagerにモジュールを登録
     this.moduleManager.registerModule('Mixer', this.setMixer);
@@ -72,25 +71,23 @@ function Manipulator(ctx, recipe, mm){
     this.moduleManager.registerModule('Noise', this.setNoise);
     this.moduleManager.registerModule('Delay', this.setDelay);
 
-    this.initManipulator();
-
     //recipeをもとにAudioNodeをつなぐ
     this.setManipulator(JSON.parse(JSON.stringify(this.recipe)), this.ctx.destination);
 
+    this.initManipulator();
+}
+Manipulator.prototype.initManipulator = function(){
+    //オシレータを再生状態にする
+    //音のON、OFFはエンベロープで管理
     for (key in this.moduleManager){
+        //モジュールにVCOオプションが付いていればそのモジュールはオシレータを持っている
         if (this.moduleManager[key].type == 'VCO'){
-            for (var i=0; i<this.moduleManager[key].nodeCount; i++){
-                this.moduleManager[key].nodeList[i].start(0);
+            var nodeList = this.moduleManager[key].nodeList;
+            for (var i=0; i<nodeList.length; i++){
+                nodeList[i].start(0);
             }
         }
     }
-}
-Manipulator.prototype.initManipulator = function(){
-    //moduleManagerを初期化
-    for (key in this.moduleManager){
-        this.moduleManager[key].nodeCount = 0;
-    }
-    this.maxRelease = 0;
 };
 
 Manipulator.prototype.noteNoTofreq = function (noteNo){
@@ -163,8 +160,9 @@ Manipulator.prototype.noteOn = function(noteNo, time) {
     //Envが指定してあるモジュールについてエンベロープ処理を実行
     for (key in moduleManager){
         if (moduleManager[key].type == 'Env'){
-            for (var i=0; i<moduleManager[key].nodeCount; i++){
-                this.EnvOn(moduleManager[key].nodeList[i], moduleManager[key].paramList[i], time);
+            var nodeList = moduleManager[key].nodeList;
+            for (var i=0; i<nodeList.length; i++){
+                this.EnvOn(nodeList[i], moduleManager[key].paramList[i], time);
             }
         }
     }
@@ -182,8 +180,9 @@ Manipulator.prototype.noteOff = function(time){
     for (key in moduleManager){
         if (moduleManager[key].type == 'Env'){
             //vcaのreleaseに合わせて音量を0にする
-            for (var i=0; i<this.moduleManager['Env'].nodeCount; i++){
-                this.EnvOff(moduleManager[key].nodeList[i], moduleManager[key].paramList[i], time);
+            var nodeList = moduleManager[key].nodeList;
+            for (var i=0; i<nodeList.length; i++){
+                this.EnvOff(nodeList[i], moduleManager[key].paramList[i], time);
             }
         }
     }
