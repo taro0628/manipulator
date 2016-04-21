@@ -77,5 +77,6 @@ JSON形式でオシレータやフィルタ、エフェクトなどのつなげ�
   ```
 
 ##ライセンス
-
-[MIT](http://b4b4r07.mit-license.org)
+Copyright (c) 2016 Kotaro Makino
+Released under the MIT license
+[http://opensource.org/licenses/mit-license.php](http://opensource.org/licenses/mit-license.php)

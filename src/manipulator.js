@@ -1,3 +1,11 @@
+/**
+Manipulator
+
+Copyright (c) 2016 Kotaro Makino
+
+This software is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+*/
 function ModuleManager(){
 
 }
@@ -68,7 +76,7 @@ function Manipulator(ctx, recipe, mm){
 
     //recipeをもとにAudioNodeをつなぐ
     this.setManipulator(JSON.parse(JSON.stringify(this.recipe)), this.ctx.destination);
-    
+
     for (key in this.moduleManager){
         if (this.moduleManager[key].type == 'VCO'){
             for (var i=0; i<this.moduleManager[key].nodeCount; i++){
